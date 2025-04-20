@@ -96,10 +96,10 @@ def get_Chat_response(text):
 def llm_Call(user_input):
         print("enter llm")
         print(user_input)
-        client = OpenAI(
-        base_url="https://openrouter.ai/api/v1",
-        api_key="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",
-        )        
+
+        
+                #for testing this key will be here. When changing for a paid key or producction, this should be moved to a .env file
+             
         try:            
             client = OpenAI(
                 base_url="https://openrouter.ai/api/v1",

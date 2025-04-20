@@ -36,12 +36,12 @@ venv\Scripts\activate
 ### Install dependencies
 
 
-You also need `nltk`:
-
  ```console
   pip install -r /path/to/requirements.txt
 
  ```
+(if you are not using docker)
+You also need `nltk`:
 Run this once in your terminal:
  ```console
   $ python
