@@ -106,7 +106,8 @@ def llm_Call(user_input):
                         "dont return a message, Return ONLY a JSON in this form "+\
                         '"{"budget": "", "size": "", "type": "", "city": "", "purpose": ""} "'+\
                         "with the extracted fields." +\
-                        f"Query:  {user_input}"
+                        f"Query:  {user_input}" +\
+                        "if there is any new important field, please add it at the json."
                 }
             ]
             )
