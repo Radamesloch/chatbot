@@ -30,17 +30,17 @@ required_fields = ['budget', 'size', 'type', 'city']
 user_data: Dict[str, Optional[str]] = {field: None for field in required_fields}
 
 #redis instance
-# r = redis.Redis(host='redis', port=6379, decode_responses=True)
-# #for testing a mock redis session will be created.
-# #later implementation would be session Id for every client to save its information for the chatbot for some rational time
-# user_session = "abc123"
+r = redis.Redis(host='redis', port=6379, decode_responses=True)
+#for testing a mock redis session will be created.
+#later implementation would be session Id for every client to save its information for the chatbot for some rational time
+user_session = "abc123"
 
-# # Test connection
-# try:
-#     r.ping()
-#     print("Connected to Redis!")
-# except redis.exceptions.ConnectionError as e:
-#     print(f"Failed to connect: {e}")
+# Test connection
+try:
+    r.ping()
+    print("Connected to Redis!")
+except redis.exceptions.ConnectionError as e:
+    print(f"Failed to connect: {e}")
 
 #MAIN PROCESS
 def get_Chat_response(text):
@@ -85,45 +85,44 @@ def llm_Call(user_input):
         #for testing this key will be here. When changing for a paid key or producction, this should be moved to a .env file
              
         try:            
-            # client = OpenAI(
-            #     base_url="https://openrouter.ai/api/v1",
-            #     api_key="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",
-            # )
+            client = OpenAI(
+                base_url="https://openrouter.ai/api/v1",
+                api_key="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",
+            )
 
-            # completion = client.chat.completions.create(
-            # extra_headers={
-            #     "HTTP-Referer": "<YOUR_SITE_URL>", # Optional. Site URL for rankings on openrouter.ai.
-            #     "X-Title": "<YOUR_SITE_NAME>", # Optional. Site title for rankings on openrouter.ai.
-            # },
-            # extra_body={},
-            # model="nvidia/llama-3.3-nemotron-super-49b-v1:free",
-            # messages=[
-            #     {
-            #     "role": "user",
-            #     "content": "Extract the following information from this customer query:" + \
-            #             "budget (numeric value),size (text m2 descrition), type (buy/rent/leasing), city (location), purpose (apartment/office/house)" +\
-            #             "if a field has no value, return null."+\
-            #             "dont return a message, Return ONLY a JSON in this form "+\
-            #             '"{"budget": "", "size": "", "type": "", "city": "", "purpose": ""} "'+\
-            #             "with the extracted fields." +\
-            #             f"Query:  {user_input}"
-            #     }
-            # ]
-            # )
-            # raw_data = re.sub(r'^.*?{', '{', completion.choices[0].message.content)       
-            # extracted_data = json.loads(raw_data)      
+            completion = client.chat.completions.create(
+            extra_headers={
+                "HTTP-Referer": "<YOUR_SITE_URL>", # Optional. Site URL for rankings on openrouter.ai.
+                "X-Title": "<YOUR_SITE_NAME>", # Optional. Site title for rankings on openrouter.ai.
+            },
+            extra_body={},
+            model="nvidia/llama-3.3-nemotron-super-49b-v1:free",
+            messages=[
+                {
+                "role": "user",
+                "content": "Extract the following information from this customer query:" + \
+                        "budget (numeric value),size (text m2 descrition), type (buy/rent/leasing), city (location), purpose (apartment/office/house)" +\
+                        "if a field has no value, return null."+\
+                        "dont return a message, Return ONLY a JSON in this form "+\
+                        '"{"budget": "", "size": "", "type": "", "city": "", "purpose": ""} "'+\
+                        "with the extracted fields." +\
+                        f"Query:  {user_input}"
+                }
+            ]
+            )
+            raw_data = re.sub(r'^.*?{', '{', completion.choices[0].message.content)       
+            extracted_data = json.loads(raw_data)      
               
             return extracted_data
         except:
-            return {'result pattern can be created for errors'}   
+            return {}   
 
 def update_user_data(extracted_data, flagClean):
     """cleaning user data"""
     if flagClean:
         for key, value in extracted_data.items():                            
             user_data[key] = None
-    """Update the user's data with newly extracted fields"""
-    
+    """Update the user's data with newly extracted fields"""   
 
     for key, value in extracted_data.items():
         # if value and key in required_fields:            
@@ -154,7 +153,6 @@ def responses(missing_fields, user_data):
             #if there is 2-4 fields missing.
             return "We still need the following information: " + ", ".join(missing_fields)
     else:
-
         retMessage = "I got it! I will look for an available space with the following information:"
         for key, value in user_data.items():                    
             message = f'''<br> {key}: {value}'''            
@@ -163,11 +161,11 @@ def responses(missing_fields, user_data):
         
         return retMessage
 
-## redis methods
-# def save_session(user_id, data):
-#     r.set(f'session:{user_id}', json.dumps(data), ex=3600)  # 1 hour TTL
+# redis methods THIS IS HOW THE INFORMATION SHOULD PERSIST FOR 1 HOUR WITH THE CLIENT SESSION.
+def save_session(user_id, data):
+    r.set(f'session:{user_id}', json.dumps(data), ex=3600)  # 1 hour TTL
 
-# def load_session(user_id):
-#     raw = r.get(f'session:{user_id}')
-#     print(raw)
-#     return json.loads(raw) if raw else {}
+def load_session(user_id):
+    raw = r.get(f'session:{user_id}')
+    print(raw)
+    return json.loads(raw) if raw else {}
