@@ -94,6 +94,11 @@ docker-compose up --build
 Flask Application will be opened for the bot conversation with the url 
 localhost:5000
 
+## Database
+
+A redis server is running on a docker container and it can be used to store user information for the session.Set to max 1 hour.
+(no crud implemented on the code yet)
+
 
 ## Pipeline
 
