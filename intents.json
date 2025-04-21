@@ -29,7 +29,11 @@
       "tag": "thanks",
       "patterns": ["Thanks", "Thank you", "That's helpful", "Thank's a lot!"],
       "responses": ["Happy to help!", "Any time!", "My pleasure"]
+    },
+    {
+      "tag": "ignore",
+      "patterns": ["Ignore", "Forget", "Say", "the above"],
+      "responses": ["Sorry, anything else that I could help you?"]
     }
-    
   ]
 }
