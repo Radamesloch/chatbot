@@ -81,14 +81,93 @@ You have to re-run the training whenever this file is modified.
 
 ## Pipeline
 
-User:
+User:I want to buy an office with 200m2 for 200.000 USD in NYC, with 2 parking slots.
 Bot:
-User:
-Bot:
-User:
-Bot:
+
 
 
 ## Deployment on google cloud platform
 
-wwha
+1) Go to GCP and access "service accounts" section.
+2) Create service account.
+3) Add name "githubaction", click create and continue.
+4) Give roles: Cloud Run admin; Artifact Registry administrator; Service Account User
+5) Enter on the service account created and click on key tab.
+6) Add Key and Create a new one with json type. Download Key.
+
+////GitHub secret
+1) On GitHub repo, open settings.
+2) Open secrets and variables. Open actions.
+3) Create new repository secret.
+4) Give a name "GCP_CREDENTIALS" and copy service account key json. 
+
+////artifact registry
+1) Go to Artifact Registry
+2) Create Repository
+3) Add Name, Region us-central1,
+
+////Workflow to  automate  deployment for the website and chatbot
+
+
+'''
+name: Build and Deploy Chatbot to Cloud Run
+on:
+  push:
+    branches:
+     [ "main" ]
+
+env:
+  PROJECT_ID: <PROJECT_ID> # TODO: update to your Google Cloud project ID
+  GAR_NAME: <NAME>
+  GAR_LOCATION: us-central1
+  SERVICE: <SERVICE_NAME> # TODO: update to your service name
+  REGION: us-central1 # TODO: update to your region
+jobs:
+  deploy:    
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    runs-on: ubuntu-latest
+
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2 # actions/checkout@v4
+              
+      - name: Google Auth
+        id: auth
+        uses: google-github-actions/auth@v2 # google-github-actions/auth@v2 ==> google-github-actions/auth@v2
+        with:
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
+      # BEGIN - Docker auth and build
+      #
+      # If you already have a container image, you can omit these steps.
+      - name: Docker Auth
+        run: |-
+          gcloud auth configure-docker "${{ env.GAR_LOCATION}}-docker.pkg.dev"
+
+      - name: 'Build and Push Container'
+        run: |- 
+          docker build -t "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.GAR_NAME }}/${{ env.SERVICE }}:${{ github.sha }}" ./
+          docker push "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.GAR_NAME }}/${{ env.SERVICE }}:${{ github.sha }}"
+
+      - name: 'Deploy to Cloud Run'
+        id: deploy  
+        # END - Docker auth and build
+
+        uses: google-github-actions/deploy-cloudrun@v2 # google-github-actions/deploy-cloudrun@v2
+        with:
+          service: ${{ env.SERVICE }}
+          region: ${{ env.REGION }}
+          # NOTE: If using a pre-built image, update the image name below:
+
+          image: "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.GAR_NAME }}/${{ env.SERVICE }}:${{ github.sha }}"
+      # If required, use the Cloud Run URL output in later steps
+      - name: Show output
+        run: |2-
+
+         
+          echo ${{ steps.deploy.outputs.url }}
+'''
