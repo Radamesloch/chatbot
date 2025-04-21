@@ -85,10 +85,10 @@ localhost:5000
 ## Pipeline
 
 Greeting, thanks, and goodbye are has self trained bot answers.
-
+```
 User:I want to buy an office with 200m2 for 200.000 USD in NYC, with 2 parking slots.
 Bot:I got it! I will look for an available space with the following information:<br> budget: 200.000<br> size: 200<br> type: buy<br> city: NYC<br> purpose: office, parking slot: 2.
-
+```
 
 ## Deployment on Google Cloud Platform
 
