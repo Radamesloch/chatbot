@@ -18,7 +18,6 @@ A LLM reader to transform natural language into the required fields
 
 - The implementation is straightforward with a Feed Forward Neural net with 2 hidden layers.
 - Customization is super easy. Just modify `intents.json` with possible patterns and responses and re-run the training.
-- The factor to call this part of the bot is 98%
 
 A free LLM model from open router is ready for requested information.
 A paid model like openai, claude can be used, or a llama agent can be downloaded to local use.
