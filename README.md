@@ -10,9 +10,9 @@ A LLM reader to transform natural language into the required fields
 A free LLM model from open router is ready for requested information.
 A paid model like openai, claude can be used, or a llama agent can be downloaded to local use.
 For Test Challange, this model is being used and it has 50 uses each day.
-'''
+```
 [model="agentica-org/deepcoder-14b-preview:free"](https://openrouter.ai/nvidia/llama-3.3-nemotron-super-49b-v1:free/api)
-'''
+```
 
 api token can be created free in here.
 https://openrouter.ai/settings/keys
@@ -24,34 +24,37 @@ for this practice, I will provide a token that will be deleted later.
 ### Create an environment
 Whatever you prefer (e.g. `conda` or `venv`)
 ```console
-mkdir chatbot
-$ cd chatbot
-clone or download github code
-$ python3 -m venv venv
-'''
+  mkdir chatbot
+  $ cd chatbot
+  clone or download github code
+  $ python3 -m venv venv
+```
 
 ### Activate it
-'''
-Mac / Linux:
-. venv/bin/activate
-Windows:
-venv\Scripts\activate
+
+```
+  Mac / Linux:
+  . venv/bin/activate
+  Windows:
+  venv\Scripts\activate
 ```
 ### Install dependencies
 
 
  ```console
   pip install -r /path/to/requirements.txt
-
  ```
+
 (if you are not using docker)
 You may also need `nltk`:
 Run this once in your terminal:
+
  ```console
   $ python
   >>> import nltk
   >>> nltk.download('punkt')
 ```
+
 ### Run Testings 
 The test were created using TDD technique, and they are automated by github actions.
 
