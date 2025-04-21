@@ -1,6 +1,14 @@
-```For the Spot2 test challenge, I dedicated time and focus to deliver a high-quality, scalable solution that reflects real-world development standards. I followed Test-Driven Development (TDD) to ensure the reliability and clarity of the code from the start, writing tests before each implementation step.
+```
+  For the Spot2 test challenge, I dedicated time and focus to deliver a high-quality, 
+  scalable solution that reflects real-world development standards. I followed Test-Driven 
+  Development (TDD) to ensure the reliability and clarity of the code from the start,
+  writing tests before each implementation step.
 
-Throughout the process, I prioritized clean architecture, maintainability, and best practices like SOLID principles and clear separation of concerns. My goal was not only to meet the requirements but to go beyond them — delivering a solution aligned with Spot2’s commitment to innovation, excellence, and technical precision.
+
+  Throughout the process, I prioritized clean architecture, maintainability, 
+  and best practices like SOLID principles and clear separation of concerns. 
+  My goal was not only to meet the requirements but to go beyond them — delivering a 
+  solution aligned with Spot2’s commitment to innovation, excellence, and technical precision.
 ```
 
 # Implementation of a Customer Service Chatbot.  
